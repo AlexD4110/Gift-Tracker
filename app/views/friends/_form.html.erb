@@ -1,4 +1,7 @@
-<%= form_with(model: friend) do |form| %>
+<%= form_with(model: friend, data:
+  { controller: 'nested-form', nested_form_wrapper_selector_value:
+    '.nested-form-wrapper' }) do |form| %>
+
   <% if friend.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(friend.errors.count, "error") %> prohibited this friend from being saved:</h2>
