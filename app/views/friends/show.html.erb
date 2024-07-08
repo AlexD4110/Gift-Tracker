@@ -36,14 +36,8 @@
             <td><%= number_to_currency(gift.price) %></td>
             <td><%= link_to 'Link', gift.link, target: '_blank' %></td>
             <td>
-              <%= def edit_friend_gift_path(i, gift)
-                    # code here
-                  end
-                  link_to 'Edit', edit_friend_gift_path(gift.friend, gift), class: 'btn btn-secondary btn-sm' %>
-              <%= def friend_gift_path(i, gift)
-                    # code here
-                  end
-                  link_to 'Destroy', friend_gift_path(gift.friend, gift), method: :delete, class: 'btn btn-danger btn-sm', data: { confirm: 'Are you sure?' } %>
+              <%= link_to 'Edit', edit_friend_gift_path(gift.friend, gift), class: 'btn btn-secondary btn-sm' %>
+              <%= link_to 'Destroy', friend_gift_path(gift.friend, gift), method: :delete, class: 'btn btn-danger btn-sm', data: { confirm: 'Are you sure?' } %>
             </td>
           </tr>
         <% end %>
@@ -62,3 +56,5 @@
     </div>
   </div>
 </div>
+
+<%= turbo_stream_from @friend %>

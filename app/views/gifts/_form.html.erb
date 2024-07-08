@@ -1,37 +1,57 @@
-<%= form_with(model: gift) do |form| %>
+<%= form_with(model: [friend, gift], local: false, data:
+  { controller: 'nested-form',
+    nested_form_wrapper_selector_value: '.nested-form-wrapper'
+  }) do |form| %>
   <% if gift.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(gift.errors.count, "error") %> prohibited this gift from being saved:</h2>
-
+    <div class="alert alert-danger">
+      <h4><%= pluralize(gift.errors.count, "error") %> prohibited this gift from being saved:</h4>
       <ul>
-        <% gift.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <% gift.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="form-group">
+    <%= form.label :name, 'Name', class: 'form-label' %>
+    <%= form.text_field :name, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :price, class: 'form-label' %>
+    <%= form.text_field :price, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :link, class: 'form-label' %>
+    <%= form.text_field :link, class: 'form-control' %>
   </div>
 
   <div>
-    <%= form.label :price, style: "display: block" %>
-    <%= form.text_field :price %>
+    <%= form.submit 'Save', class: 'btn btn-primary mt-3' %>
   </div>
 
-  <div>
-    <%= form.label :link, style: "display: block" %>
-    <%= form.text_field :link %>
-  </div>
-
-  <div>
-    <%= form.label :friend_id, style: "display: block" %>
-    <%= form.text_field :friend_id %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
+  <template data-gifts-target="template">
+    <div class="nested-fields" data-new-record="true">
+      <div class="form-row">
+        <div class="col">
+          <label for="friend_gifts_attributes_TEMPLATE_RECORD_name" class="form-label">Name</label>
+          <input type="text" name="friend[gifts_attributes][TEMPLATE_RECORD][name]" id="friend_gifts_attributes_TEMPLATE_RECORD_name" class="form-control">
+        </div>
+        <div class="col">
+          <label for="friend_gifts_attributes_TEMPLATE_RECORD_price" class="form-label">Price</label>
+          <input type="text" name="friend[gifts_attributes][TEMPLATE_RECORD][price]" id="friend_gifts_attributes_TEMPLATE_RECORD_price" class="form-control">
+        </div>
+        <div class="col">
+          <label for="friend_gifts_attributes_TEMPLATE_RECORD_link" class="form-label">Link</label>
+          <input type="text" name="friend[gifts_attributes][TEMPLATE_RECORD][link]" id="friend_gifts_attributes_TEMPLATE_RECORD_link" class="form-control">
+        </div>
+        <div class="col">
+          <a href="#" class="btn btn-danger" data-action="click->gifts#removeGift">Remove</a>
+          <input type="hidden" name="friend[gifts_attributes][TEMPLATE_RECORD][_destroy]" id="friend_gifts_attributes_TEMPLATE_RECORD__destroy">
+        </div>
+      </div>
+    </div>
+  </template>
 <% end %>
