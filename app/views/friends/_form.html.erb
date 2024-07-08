@@ -5,24 +5,26 @@
   <% if friend.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(friend.errors.count, "error") %> prohibited this friend from being saved:</h2>
-
       <ul>
-        <% friend.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <% friend.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="row">
+    <div class="col-md-6">
+      <%= form.label :name, 'Name', class: 'form-label' %>
+      <%= form.text_field :name, class: 'form-control', required: true, placeholder: 'First name' %>
+    </div>
+    <div class="col-md-6">
+      <%= form.label :birthday, 'Birthday', class: 'form-label' %>
+      <%= form.date_field :birthday, class: 'form-control', start_year: 1900, end_year: Time.now.year, placeholder: 'Birthday' %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :birthday, style: "display: block" %>
-    <%= form.date_field :birthday %>
-  </div>
+  <h3>Gifts</h3>
 
   <template data-nested-form-target="template">
     <%= form.fields_for :gifts, Gift.new, child_index: 'NEW_RECORD' do |gift_fields| %>
@@ -36,9 +38,13 @@
 
   <div data-nested-form-target="target"></div>
 
-  <button type="button" data-action="nested-form#add">New Gift</button>
+  <br>
+
+  <button type="button" data-action="nested-form#add" class="btn btn-info">Add Gift</button>
 
   <div>
-    <%= form.submit %>
+    <%= form.submit 'Save', class: 'btn btn-primary mt-3' %>
   </div>
+
 <% end %>
+

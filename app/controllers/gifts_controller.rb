@@ -1,4 +1,5 @@
 class GiftsController < ApplicationController
+  before_action :set_friend
   before_action :set_gift, only: %i[ show edit update destroy ]
 
   # GET /gifts or /gifts.json
@@ -58,9 +59,18 @@ class GiftsController < ApplicationController
   end
 
   private
+
+  def set_friend
+    @friend = Friend.find(params[:friend_id])
+  end
+
+  private
     # Use callbacks to share common setup or constraints between actions.
     def set_gift
-      @gift = Gift.find(params[:id])
+      @gift = @friend.gifts.find_by(id: params[:id])
+      if @gift.nil?
+        redirect_to friend_path(@friend), alert: "Gift not found."
+      end
     end
 
     # Only allow a list of trusted parameters through.

@@ -1,10 +1,13 @@
-<h1>Editing friend</h1>
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-body">
+      <h1 class="card-title">Edit Friend</h1>
+      <%= render 'form', friend: @friend %>
 
-<%= render "form", friend: @friend %>
-
-<br>
-
-<div>
-  <%= link_to "Show this friend", @friend %> |
-  <%= link_to "Back to friends", friends_path %>
+      <div class="mt-4">
+        <%= link_to "Show this friend", @friend, class: 'btn btn-secondary' %>
+        <%= link_to "Back to friends", friends_path, class: 'btn btn-secondary' %>
+      </div>
+    </div>
+  </div>
 </div>

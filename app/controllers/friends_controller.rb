@@ -13,10 +13,13 @@ class FriendsController < ApplicationController
   # GET /friends/new
   def new
     @friend = Friend.new
+    @friend.gifts.build
   end
 
   # GET /friends/1/edit
   def edit
+    @friend = Friend.find(params[:id])
+    @friend.gifts.build if @friend.gifts.empty?
   end
 
   # POST /friends or /friends.json
