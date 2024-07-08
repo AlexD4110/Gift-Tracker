@@ -24,6 +24,17 @@
     <%= form.date_field :birthday %>
   </div>
 
+  <template data-nested-form-target="template">
+    <%= form.fields_for :gifts, Gift.new, child_index: 'NEW_RECORD' do |gift_fields| %>
+      <%= render "friends/gift_fields", f: gift_fields %>
+    <% end %>
+  </template>
+
+  <%= form.fields_for :gifts do |gift_fields| %>
+    <%= render "friends/gift_fields", f: gift_fields %>
+  <% end %>
+
+
   <div>
     <%= form.submit %>
   </div>
