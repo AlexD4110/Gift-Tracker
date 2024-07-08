@@ -1,60 +1,56 @@
 class GiftsController < ApplicationController
   before_action :set_friend
-  before_action :set_gift, only: %i[ show edit update destroy ]
+  before_action :set_gift, only: [:show, :edit, :update, :destroy]
 
-  # GET /gifts or /gifts.json
   def index
     @gifts = Gift.all
   end
 
-  # GET /gifts/1 or /gifts/1.json
-  def show
-  end
-
-  # GET /gifts/new
   def new
     @gift = Gift.new
   end
+  def show
+    @gift
+  end
 
-  # GET /gifts/1/edit
+  def create
+    @gift = @friend.gifts.build(gift_params)
+
+    if @gift.save
+      respond_to do |format|
+        format.turbo_stream { render 'gifts/turbo_stream' }
+        format.html { redirect_to @friend, notice: 'Gift was successfully created.' }
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream { render 'gifts/turbo_stream', status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
+      end
+    end
+  end
+
   def edit
   end
 
-  # POST /gifts or /gifts.json
-  def create
-    @gift = Gift.new(gift_params)
-
-    respond_to do |format|
-      if @gift.save
-        format.html { redirect_to gift_url(@gift), notice: "Gift was successfully created." }
-        format.json { render :show, status: :created, location: @gift }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @gift.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /gifts/1 or /gifts/1.json
   def update
-    respond_to do |format|
-      if @gift.update(gift_params)
-        format.html { redirect_to gift_url(@gift), notice: "Gift was successfully updated." }
-        format.json { render :show, status: :ok, location: @gift }
-      else
+    if @gift.update(gift_params)
+      respond_to do |format|
+        format.turbo_stream { render 'gifts/turbo_stream' }
+        format.html { redirect_to @friend, notice: 'Gift was successfully updated.' }
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream { render 'gifts/turbo_stream', status: :unprocessable_entity }
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @gift.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /gifts/1 or /gifts/1.json
   def destroy
-    @gift.destroy!
-
+    @gift.destroy
     respond_to do |format|
-      format.html { redirect_to gifts_url, notice: "Gift was successfully destroyed." }
-      format.json { head :no_content }
+      format.turbo_stream { render 'gifts/turbo_stream' }
+      format.html { redirect_to @friend, notice: 'Gift was successfully destroyed.' }
     end
   end
 
@@ -64,17 +60,14 @@ class GiftsController < ApplicationController
     @friend = Friend.find(params[:friend_id])
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_gift
-      @gift = @friend.gifts.find_by(id: params[:id])
-      if @gift.nil?
-        redirect_to friend_path(@friend), alert: "Gift not found."
-      end
+  def set_gift
+    @gift = @friend.gifts.find_by(id: params[:id])
+    if @gift.nil?
+      redirect_to friend_path(@friend), alert: "Gift not found."
     end
+  end
 
-    # Only allow a list of trusted parameters through.
-    def gift_params
-      params.require(:gift).permit(:name, :price, :link, :friend_id)
-    end
+  def gift_params
+    params.require(:gift).permit(:name, :price, :link)
+  end
 end

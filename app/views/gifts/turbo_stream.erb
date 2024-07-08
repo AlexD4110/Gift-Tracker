@@ -1,0 +1,10 @@
+<% if @gift.destroyed? %>
+  <%= turbo_stream.remove dom_id(@gift) %>
+<% elsif @gift.errors.any? %>
+  <%= turbo_stream.replace "new_gift_form", partial: "gifts/form", locals: { gift: @gift, friend: @friend } %>
+<% elsif @gift.previous_changes.key?("id") %>
+  <%= turbo_stream.append "gifts_list", partial: "gifts/gift", locals: { gift: @gift } %>
+  <%= turbo_stream.replace "new_gift_form", partial: "gifts/form", locals: { gift: @friend.gifts.build, friend: @friend } %>
+<% else %>
+  <%= turbo_stream.replace dom_id(@gift), partial: "gifts/gift", locals: { gift: @gift } %>
+<% end %>
