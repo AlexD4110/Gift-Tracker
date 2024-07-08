@@ -34,6 +34,9 @@
     <%= render "friends/gift_fields", f: gift_fields %>
   <% end %>
 
+  <div data-nested-form-target="target"></div>
+
+  <button type="button" data-action="nested-form#add">New Gift</button>
 
   <div>
     <%= form.submit %>
