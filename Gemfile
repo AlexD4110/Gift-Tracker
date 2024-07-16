@@ -69,4 +69,8 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 
+  gem "will_paginate"
+
+  gem "kaminari"
+
 end

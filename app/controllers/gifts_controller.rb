@@ -30,7 +30,14 @@ class GiftsController < ApplicationController
   end
 
   def edit
+    unless @gift
+      respond_to do |format|
+        format.turbo_stream { render 'gifts/turbo_stream', status: :not_found }
+        format.html { redirect_to @friend, alert: 'Gift not found.' }
+      end
+    end
   end
+
 
   def update
     if @gift.update(gift_params)
