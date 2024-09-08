@@ -1,5 +1,6 @@
 <% if @gift.destroyed? %>
   <%= turbo_stream.remove dom_id(@gift) %>
+  <%= turbo_stream.prepend "alerts", partial: "shared/alert", locals: { message: "Gift successfully deleted", alert_type: "success" } %>
 <% elsif @gift.errors.any? %>
   <%= turbo_stream.replace "new_gift_form", partial: "gifts/form", locals: { gift: @gift, friend: @friend } %>
 <% elsif @gift.previous_changes.key?("id") %>
